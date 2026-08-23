@@ -6,7 +6,7 @@ dgShowFileTree: false
 {% set notes = collections.note | gardenNotes %}
 {% set topics = notes | gardenTopics %}
 {% set kinds = notes | gardenKinds %}
-{% set hubs = notes | gardenHubs %}
+{% set recentNotes = notes | gardenRecentNotes(3) %}
 <!DOCTYPE html>
 <html lang="{{ meta.mainLanguage }}">
   <head>
@@ -25,34 +25,30 @@ dgShowFileTree: false
     {% endif %}
 
     <main class="content cm-s-obsidian print garden-browser">
-      <header class="garden-browser-header">
-        <h1>Explore the Garden</h1>
-        <p class="garden-browser-intro">Browse published notes by topic, growth stage, and kind.</p>
-      </header>
-
-      {% if hubs.length %}
-        <section class="garden-hub-section" aria-label="Garden hubs">
-          <h2>Hubs</h2>
-          <p class="garden-section-intro">Curated entry points into related notes.</p>
-          <div class="garden-hub-list">
-            {% for hub in hubs %}
-              <article class="garden-hub-card">
-                <h3><a href="{{ hub.url }}">{{ hub.title }}</a></h3>
+      {% if recentNotes.length %}
+        <section class="garden-recent-section" aria-label="Recently updated notes">
+          <h1>Recently Updated</h1>
+          <div class="garden-recent-list">
+            {% for note in recentNotes %}
+              <article class="garden-recent-card">
+                <h2><a href="{{ note.url }}">{{ note.title }}</a></h2>
                 <div class="garden-card-meta">
-                  {% if hub.statusLabel %}
-                    <span class="note-status-badge" data-status="{{ hub.status }}">{{ hub.statusLabel }}</span>
+                  {% if note.statusLabel %}
+                    <span class="note-status-badge" data-status="{{ note.status }}">{{ note.statusLabel }}</span>
                   {% endif %}
-                  <span class="garden-kind-badge">Hub</span>
+                  {% if note.kindLabel %}
+                    <span class="garden-kind-badge">{{ note.kindLabel }}</span>
+                  {% endif %}
                 </div>
-                {% if hub.topics.length %}
+                {% if note.topics.length %}
                   <div class="garden-topic-row">
-                    {% for topic in hub.topics %}
+                    {% for topic in note.topics %}
                       <a class="garden-topic-chip" href="/garden/?topic={{ topic.value }}">{{ topic.label }}</a>
                     {% endfor %}
                   </div>
                 {% endif %}
-                {% if hub.description %}
-                  <p class="garden-card-description">{{ hub.description }}</p>
+                {% if note.description %}
+                  <p class="garden-card-description">{{ note.description }}</p>
                 {% endif %}
               </article>
             {% endfor %}

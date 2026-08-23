@@ -53,27 +53,18 @@ body {
         --garden-gap: 0.85rem;
     }
 
-    .garden-browser-header {
-        margin-bottom: 1.4rem;
-
-        h1 {
-            margin-bottom: 0.35rem;
-        }
-    }
-
-    .garden-browser-intro,
     .garden-card-description,
     .garden-section-intro {
         color: var(--text-muted);
     }
 
-    .garden-hub-section {
+    .garden-recent-section {
         margin: 1.2rem 0 1.4rem;
         padding-bottom: 1.1rem;
         border-bottom: 1px solid var(--background-modifier-border);
 
-        h2 {
-            margin-bottom: 0.25rem;
+        h1 {
+            margin-bottom: 0.75rem;
         }
     }
 
@@ -81,15 +72,15 @@ body {
         margin: 0 0 0.85rem;
     }
 
-    .garden-hub-list {
+    .garden-recent-list {
         display: grid;
         gap: var(--garden-gap);
     }
 
-    .garden-hub-card {
+    .garden-recent-card {
         padding: 0.85rem 0;
 
-        h3 {
+        h2 {
             margin: 0 0 0.35rem;
             font-size: 1.05em;
         }

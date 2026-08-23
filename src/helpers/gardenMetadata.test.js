@@ -3,6 +3,7 @@ import {
 	gardenNoteFromItem,
 	gardenHubs,
 	gardenNotes,
+	gardenRecentNotes,
 	gardenTopics,
 	gardenKinds,
 	normalizeStatus,
@@ -143,6 +144,41 @@ describe("garden metadata", () => {
 		expect(gardenHubs(notes).map((note) => note.title)).toEqual([
 			"Books",
 			"Machine Learning",
+		]);
+	});
+
+	it("returns the three most recently updated notes", () => {
+		const notes = gardenNotes([
+			item({
+				title: "Old Hub",
+				"garden-type": "hub",
+				status: "seed",
+				updated: "2026-01-01",
+			}),
+			item({
+				title: "Newest Travel",
+				"garden-type": "travel",
+				status: "evergreen",
+				updated: "2026-03-01",
+			}),
+			item({
+				title: "Middle Note",
+				"garden-type": "note",
+				updated: "2026-02-01",
+			}),
+			item(
+				{
+					title: "Fallback Date",
+					"garden-type": "journal",
+				},
+				{ date: new Date("2026-02-15T00:00:00Z") },
+			),
+		]);
+
+		expect(gardenRecentNotes(notes).map((note) => note.title)).toEqual([
+			"Newest Travel",
+			"Fallback Date",
+			"Middle Note",
 		]);
 	});
 });

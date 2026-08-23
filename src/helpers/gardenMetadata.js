@@ -79,6 +79,12 @@ function isPublishedGardenNote(item) {
 	return item.data["dg-publish"] === true;
 }
 
+function toTimestamp(value) {
+	if (!value) return 0;
+	const time = value instanceof Date ? value.getTime() : new Date(value).getTime();
+	return Number.isNaN(time) ? 0 : time;
+}
+
 function gardenNoteFromItem(item) {
 	const data = item.data || {};
 	const status = normalizeStatus(getUserProperty(data, "status"));
@@ -87,6 +93,7 @@ function gardenNoteFromItem(item) {
 	const tags = asArray(data.tags).filter((tag) => !SYSTEM_TAGS.has(tag));
 	const description =
 		getUserProperty(data, "description") || getUserProperty(data, "summary") || "";
+	const updated = getUserProperty(data, "updated") || getUserProperty(data, "created") || item.date || "";
 
 	return {
 		title: getUserProperty(data, "title") || data.title || item.fileSlug,
@@ -98,7 +105,8 @@ function gardenNoteFromItem(item) {
 		topics,
 		topicValues: topics.map((topic) => topic.value),
 		description,
-		updated: data.updated || data.created || "",
+		updated,
+		updatedTimestamp: toTimestamp(updated),
 		tags,
 	};
 }
@@ -139,6 +147,15 @@ function gardenHubs(notes) {
 	return (notes || []).filter((note) => note.kind === "hub");
 }
 
+function gardenRecentNotes(notes, limit = 3) {
+	return [...(notes || [])]
+		.sort((a, b) => {
+			const byUpdated = (b.updatedTimestamp || 0) - (a.updatedTimestamp || 0);
+			return byUpdated || a.title.localeCompare(b.title);
+		})
+		.slice(0, limit);
+}
+
 module.exports = {
 	STATUS_LABELS,
 	getUserProperty,
@@ -149,5 +166,6 @@ module.exports = {
 	gardenTopics,
 	gardenKinds,
 	gardenHubs,
+	gardenRecentNotes,
 	labelFromValue,
 };
