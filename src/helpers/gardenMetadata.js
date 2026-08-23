@@ -9,7 +9,7 @@ const ACRONYM_LABELS = {
 	mlops: "MLOps",
 };
 
-const TYPE_LABELS = {
+const KIND_LABELS = {
 	hub: "Hub",
 };
 
@@ -40,7 +40,7 @@ function normalizeFacetValue(value) {
 function labelFromValue(value) {
 	const normalized = normalizeFacetValue(value);
 	if (ACRONYM_LABELS[normalized]) return ACRONYM_LABELS[normalized];
-	if (TYPE_LABELS[normalized]) return TYPE_LABELS[normalized];
+	if (KIND_LABELS[normalized]) return KIND_LABELS[normalized];
 
 	return String(value || "")
 		.trim()
@@ -82,7 +82,7 @@ function isPublishedGardenNote(item) {
 function gardenNoteFromItem(item) {
 	const data = item.data || {};
 	const status = normalizeStatus(getUserProperty(data, "status"));
-	const type = normalizeFacetValue(getUserProperty(data, "type"));
+	const kind = normalizeFacetValue(getUserProperty(data, "garden-type"));
 	const topics = normalizeTopics(getUserProperty(data, "topics"));
 	const tags = asArray(data.tags).filter((tag) => !SYSTEM_TAGS.has(tag));
 	const description =
@@ -93,8 +93,8 @@ function gardenNoteFromItem(item) {
 		url: item.url,
 		status,
 		statusLabel: status ? STATUS_LABELS[status] : "",
-		type,
-		typeLabel: type ? labelFromValue(type) : "",
+		kind,
+		kindLabel: kind ? labelFromValue(kind) : "",
 		topics,
 		topicValues: topics.map((topic) => topic.value),
 		description,
@@ -131,12 +131,12 @@ function gardenTopics(notes) {
 	return uniqueFacets(notes, (note) => note.topics);
 }
 
-function gardenTypes(notes) {
-	return uniqueFacets(notes, (note) => note.type);
+function gardenKinds(notes) {
+	return uniqueFacets(notes, (note) => note.kind);
 }
 
 function gardenHubs(notes) {
-	return (notes || []).filter((note) => note.type === "hub");
+	return (notes || []).filter((note) => note.kind === "hub");
 }
 
 module.exports = {
@@ -147,7 +147,7 @@ module.exports = {
 	gardenNoteFromItem,
 	gardenNotes,
 	gardenTopics,
-	gardenTypes,
+	gardenKinds,
 	gardenHubs,
 	labelFromValue,
 };

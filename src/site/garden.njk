@@ -5,7 +5,7 @@ dgShowFileTree: false
 ---
 {% set notes = collections.note | gardenNotes %}
 {% set topics = notes | gardenTopics %}
-{% set types = notes | gardenTypes %}
+{% set kinds = notes | gardenKinds %}
 {% set hubs = notes | gardenHubs %}
 <!DOCTYPE html>
 <html lang="{{ meta.mainLanguage }}">
@@ -27,7 +27,7 @@ dgShowFileTree: false
     <main class="content cm-s-obsidian print garden-browser">
       <header class="garden-browser-header">
         <h1>Explore the Garden</h1>
-        <p class="garden-browser-intro">Browse published notes by topic, growth stage, and type.</p>
+        <p class="garden-browser-intro">Browse published notes by topic, growth stage, and kind.</p>
       </header>
 
       {% if hubs.length %}
@@ -42,7 +42,7 @@ dgShowFileTree: false
                   {% if hub.statusLabel %}
                     <span class="note-status-badge" data-status="{{ hub.status }}">{{ hub.statusLabel }}</span>
                   {% endif %}
-                  <span class="garden-type-badge">Hub</span>
+                  <span class="garden-kind-badge">Hub</span>
                 </div>
                 {% if hub.topics.length %}
                   <div class="garden-topic-row">
@@ -83,13 +83,13 @@ dgShowFileTree: false
           </div>
         </div>
 
-        {% if types.length %}
-          <div class="garden-filter-group" data-filter-group="type">
-            <h2>Type</h2>
+        {% if kinds.length %}
+          <div class="garden-filter-group" data-filter-group="kind">
+            <h2>Kind</h2>
             <div class="garden-filter-options">
-              <button class="garden-filter-button is-active" type="button" data-filter="type" data-value="">All</button>
-              {% for type in types %}
-                <button class="garden-filter-button" type="button" data-filter="type" data-value="{{ type.value }}">{{ type.label }}</button>
+              <button class="garden-filter-button is-active" type="button" data-filter="kind" data-value="">All</button>
+              {% for kind in kinds %}
+                <button class="garden-filter-button" type="button" data-filter="kind" data-value="{{ kind.value }}">{{ kind.label }}</button>
               {% endfor %}
             </div>
           </div>
@@ -105,15 +105,15 @@ dgShowFileTree: false
           <article class="garden-note-card"
             data-garden-note
             data-status="{{ note.status }}"
-            data-type="{{ note.type }}"
+            data-kind="{{ note.kind }}"
             data-topics="{{ note.topicValues | join(' ') }}">
             <h2><a href="{{ note.url }}">{{ note.title }}</a></h2>
             <div class="garden-card-meta">
               {% if note.statusLabel %}
                 <span class="note-status-badge" data-status="{{ note.status }}">{{ note.statusLabel }}</span>
               {% endif %}
-              {% if note.typeLabel %}
-                <span class="garden-type-badge">{{ note.typeLabel }}</span>
+              {% if note.kindLabel %}
+                <span class="garden-kind-badge">{{ note.kindLabel }}</span>
               {% endif %}
             </div>
             {% if note.topics.length %}
@@ -141,7 +141,7 @@ dgShowFileTree: false
     {% include "components/lucideIcons.njk" %}
     <script>
       (() => {
-        const state = { topic: "", status: "", type: "" };
+        const state = { topic: "", status: "", kind: "" };
         const notes = Array.from(document.querySelectorAll("[data-garden-note]"));
         const buttons = Array.from(document.querySelectorAll("[data-filter]"));
         const count = document.querySelector("[data-garden-result-count]");
@@ -156,7 +156,7 @@ dgShowFileTree: false
           const noteTopics = (note.dataset.topics || "").split(" ").filter(Boolean);
           return (!state.topic || noteTopics.includes(state.topic))
             && (!state.status || note.dataset.status === state.status)
-            && (!state.type || note.dataset.type === state.type);
+            && (!state.kind || note.dataset.kind === state.kind);
         }
 
         function syncUrl() {

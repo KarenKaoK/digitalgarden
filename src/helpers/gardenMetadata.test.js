@@ -4,7 +4,7 @@ import {
 	gardenHubs,
 	gardenNotes,
 	gardenTopics,
-	gardenTypes,
+	gardenKinds,
 	normalizeStatus,
 	normalizeTopics,
 } from "./gardenMetadata.js";
@@ -25,7 +25,7 @@ describe("garden metadata", () => {
 			item({
 				title: "MLOps",
 				status: "growing",
-				type: "project",
+				"garden-type": "project",
 				topics: ["mlops", "machine-learning"],
 			}),
 		);
@@ -33,26 +33,38 @@ describe("garden metadata", () => {
 		expect(note.title).toBe("MLOps");
 		expect(note.status).toBe("growing");
 		expect(note.statusLabel).toBe("🌿 Growing");
-		expect(note.type).toBe("project");
+		expect(note.kind).toBe("project");
 		expect(note.topicValues).toEqual(["mlops", "machine-learning"]);
+	});
+
+	it("uses garden-type for note kind", () => {
+		const note = gardenNoteFromItem(
+			item({
+				title: "Job Search",
+				"garden-type": "hub",
+			}),
+		);
+
+		expect(note.kind).toBe("hub");
+		expect(note.kindLabel).toBe("Hub");
 	});
 
 	it("prefers Digital Garden nested note properties", () => {
 		const note = gardenNoteFromItem(
 			item({
 				status: "seed",
-				type: "note",
+				"garden-type": "project",
 				topics: ["ai"],
 				"dg-note-properties": {
 					status: "evergreen",
-					type: "travel",
+					"garden-type": "travel",
 					topics: ["Travel", "Paris"],
 				},
 			}),
 		);
 
 		expect(note.status).toBe("evergreen");
-		expect(note.type).toBe("travel");
+		expect(note.kind).toBe("travel");
 		expect(note.topics).toEqual([
 			{ value: "travel", label: "Travel" },
 			{ value: "paris", label: "Paris" },
@@ -65,27 +77,27 @@ describe("garden metadata", () => {
 
 		const note = gardenNoteFromItem(item({}));
 		expect(note.status).toBe("");
-		expect(note.type).toBe("");
+		expect(note.kind).toBe("");
 		expect(note.topics).toEqual([]);
 	});
 
-	it("deduplicates topics and types from published non-home notes", () => {
+	it("deduplicates topics and kinds from published non-home notes", () => {
 		const notes = gardenNotes([
 			item({ tags: ["gardenEntry"], topics: ["home"] }, { url: "/" }),
 			item({
 				title: "AI Seed",
-				type: "note",
+				"garden-type": "note",
 				topics: "ai",
 				status: "seed",
 			}),
 			item({
 				title: "Paris",
 				"dg-note-properties": {
-					type: "travel",
+					"garden-type": "travel",
 					topics: ["travel", "ai"],
 				},
 			}),
-			item({ hide: true, type: "hidden", topics: ["hidden"] }),
+			item({ hide: true, "garden-type": "hidden", topics: ["hidden"] }),
 		]);
 
 		expect(notes.map((note) => note.title)).toEqual(["AI Seed", "Paris"]);
@@ -93,7 +105,7 @@ describe("garden metadata", () => {
 			{ value: "ai", label: "AI" },
 			{ value: "travel", label: "Travel" },
 		]);
-		expect(gardenTypes(notes)).toEqual([
+		expect(gardenKinds(notes)).toEqual([
 			{ value: "note", label: "Note" },
 			{ value: "travel", label: "Travel" },
 		]);
@@ -103,31 +115,31 @@ describe("garden metadata", () => {
 		const notes = gardenNotes([
 			item({
 				title: "Machine Learning",
-				type: "hub",
+				"garden-type": "hub",
 				status: "growing",
 				topics: ["machine-learning"],
 			}),
 			item({
 				title: "Books",
 				"dg-note-properties": {
-					type: "hub",
+					"garden-type": "hub",
 					status: "seed",
 					topics: ["books"],
 				},
 			}),
 			item({
 				title: "Regular Note",
-				type: "note",
+				"garden-type": "note",
 				topics: ["machine-learning"],
 			}),
 		]);
 
-		expect(notes.map((note) => [note.title, note.type, note.typeLabel])).toEqual([
+		expect(notes.map((note) => [note.title, note.kind, note.kindLabel])).toEqual([
 			["Books", "hub", "Hub"],
 			["Machine Learning", "hub", "Hub"],
 			["Regular Note", "note", "Note"],
 		]);
-		expect(gardenTypes(notes)).toContainEqual({ value: "hub", label: "Hub" });
+		expect(gardenKinds(notes)).toContainEqual({ value: "hub", label: "Hub" });
 		expect(gardenHubs(notes).map((note) => note.title)).toEqual([
 			"Books",
 			"Machine Learning",
