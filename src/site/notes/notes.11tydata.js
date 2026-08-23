@@ -27,6 +27,9 @@ module.exports = {
         fileSlug: item.fileSlug,
       }));
     },
+    maturityStatus: (data) => {
+      return data.status || data["dg-note-properties"]?.status || "";
+    },
     settings: (data) => {
       const noteSettings = {};
       allSettings.forEach((setting) => {

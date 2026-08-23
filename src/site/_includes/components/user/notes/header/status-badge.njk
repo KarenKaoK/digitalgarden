@@ -1,4 +1,4 @@
-{% set noteStatus = status | default("", true) | lower %}
+{% set noteStatus = maturityStatus | default("", true) | lower %}
 {% set statusLabels = {
   "seed": "🌱 Seed",
   "growing": "🌿 Growing",
