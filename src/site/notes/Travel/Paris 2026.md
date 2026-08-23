@@ -5,7 +5,7 @@
 
 
 ## Daily Notes 
-- [[Travel/Paris Day 1\|Paris Day 1]] 
+- [[Travel/Paris Day 1 - 移動到 Paris\|Paris Day 1 - 移動到 Paris]] 
 - [[Paris Day 2\|Paris Day 2]] 
 - [[Paris Day 3\|Paris Day 3]] 
 - [[Paris Day 4\|Paris Day 4]]
