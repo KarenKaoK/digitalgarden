@@ -10,4 +10,42 @@ body {
     //  h1 {
     //   color: black;
     //  }
+
+    .cm-s-obsidian > header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        > * {
+            order: 4;
+        }
+
+        > h1 {
+            order: 1;
+        }
+
+        > .note-status-badge {
+            order: 2;
+        }
+
+        > .header-meta {
+            order: 3;
+        }
+    }
+
+    .note-status-badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        margin-top: 0.35rem;
+        margin-bottom: 0.25rem;
+        padding: 0.15rem 0.5rem;
+        border: 1px solid var(--background-modifier-border);
+        border-radius: 999px;
+        background: var(--background-secondary);
+        color: var(--text-muted);
+        font-size: 0.78em;
+        font-weight: 500;
+        line-height: 1.4;
+    }
 }

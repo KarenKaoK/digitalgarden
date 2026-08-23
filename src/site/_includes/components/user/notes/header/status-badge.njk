@@ -1,0 +1,12 @@
+{% set noteStatus = status | default("", true) | lower %}
+{% set statusLabels = {
+  "seed": "🌱 Seed",
+  "growing": "🌿 Growing",
+  "evergreen": "🌳 Evergreen"
+} %}
+
+{% if statusLabels[noteStatus] %}
+  <div class="note-status-badge" data-status="{{ noteStatus }}">
+    {{ statusLabels[noteStatus] }}
+  </div>
+{% endif %}

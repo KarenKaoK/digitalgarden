@@ -74,9 +74,15 @@ describe("isDecodableImage", () => {
 			isDecodableImage("src/site/img/tree-1.svg").then(Boolean),
 		).resolves.toBe(false); // svg is not in scope for the optimizer
 
-		await expect(
-			isDecodableImage("src/site/img/user/A Assets/travolta.png"),
-		).resolves.toBe(true);
+		const tinyPng = writeTemp(
+			"tiny.png",
+			Buffer.from(
+				"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
+				"base64",
+			),
+		);
+
+		await expect(isDecodableImage(tinyPng)).resolves.toBe(true);
 	});
 
 	it("rejects HEIC content without invoking a decode", async () => {
