@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/travel/paris-day-1/","dg-note-properties":{"status":"evergreen"}}
+{"dg-publish":true,"permalink":"/travel/paris-day-1/","dg-note-properties":{"garden-type":"hub","status":"evergreen","topics":["travel"]}}
 ---
 
 - 05:40 - 15:45 FLIXBUS to paris 
