@@ -1,22 +1,54 @@
 {%if settings.dgHomeLink === true%}
+    {% set displaySiteName = meta.siteName if meta.siteName and meta.siteName != "Digital Garden" else "Karen's Digital Garden" %}
     <nav class="navbar">
+        <script>
+            (() => {
+                const savedTheme = localStorage.getItem("garden-theme") || "theme-light";
+                document.body.classList.toggle("theme-light", savedTheme === "theme-light");
+                document.body.classList.toggle("theme-dark", savedTheme === "theme-dark");
+            })();
+        </script>
         <div class="navbar-inner">
-            <a href="/" style="text-decoration: none;">
+            <a class="site-title" href="/">
                 {% if meta.siteLogoPath %}
-                    <img class="site-logo" src="{{meta.siteLogoPath}}" alt="{{meta.siteName}}">
+                    <img class="site-logo" src="{{meta.siteLogoPath}}" alt="{{displaySiteName}}">
                 {% else %}
-                    <h1 style="margin: 15px !important;">{{meta.siteName}}</h1>
+                    <span>{{displaySiteName}}</span>
                 {% endif %}
             </a>
+            <div class="navbar-links">
+                <a href="/" class="navbar-link{% if page.url == '/' %} is-active{% endif %}">Home</a>
+                <a href="/garden/" class="navbar-link{% if page.url == '/garden/' %} is-active{% endif %}">Garden</a>
+            </div>
+            <div class="navbar-actions">
+                {% if settings.dgEnableSearch === true%}
+                    {% include "components/searchButton.njk" %}
+                {%endif%}
+                <button class="theme-toggle" type="button" aria-label="Toggle theme" onclick="
+                    const nextTheme = document.body.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark';
+                    document.body.classList.toggle('theme-light', nextTheme === 'theme-light');
+                    document.body.classList.toggle('theme-dark', nextTheme === 'theme-dark');
+                    localStorage.setItem('garden-theme', nextTheme);
+                ">
+                    <i data-lucide="sun" class="theme-toggle-light"></i>
+                    <i data-lucide="moon" class="theme-toggle-dark"></i>
+                </button>
+            </div>
         </div>
-        {% if settings.dgEnableSearch === true%}
-            {% include "components/searchButton.njk" %}
-        {%endif%}
     </nav>
     {%else%}
     <div class="empty-navbar" >
         {% if settings.dgEnableSearch === true%}
             {% include "components/searchButton.njk" %}
         {%endif%}
+        <button class="theme-toggle" type="button" aria-label="Toggle theme" onclick="
+            const nextTheme = document.body.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark';
+            document.body.classList.toggle('theme-light', nextTheme === 'theme-light');
+            document.body.classList.toggle('theme-dark', nextTheme === 'theme-dark');
+            localStorage.setItem('garden-theme', nextTheme);
+        ">
+            <i data-lucide="sun" class="theme-toggle-light"></i>
+            <i data-lucide="moon" class="theme-toggle-dark"></i>
+        </button>
     </div>
 {%endif%}
