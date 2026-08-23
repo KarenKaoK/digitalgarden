@@ -41,4 +41,8 @@
 
 旅行紀錄，包括每日行程、地點、博物館、食物與旅行中的觀察。
 
+## Browse
+
+ [Browse all notes](/garden/)
+
 
