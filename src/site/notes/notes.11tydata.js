@@ -1,8 +1,6 @@
 require("dotenv").config();
-const settings = require("../../helpers/constants");
 const { pickNoteMetadata } = require("../../helpers/bases-engine/noteMetadata");
-
-const allSettings = settings.ALL_NOTE_SETTINGS;
+const { normalizeStatus, getUserProperty } = require("../../helpers/gardenMetadata");
 
 module.exports = {
   eleventyComputed: {
@@ -28,19 +26,7 @@ module.exports = {
       }));
     },
     maturityStatus: (data) => {
-      return data.status || data["dg-note-properties"]?.status || "";
-    },
-    settings: (data) => {
-      const noteSettings = {};
-      allSettings.forEach((setting) => {
-        let noteSetting = data[setting];
-        let globalSetting = process.env[setting];
-
-        let settingValue =
-          noteSetting || (globalSetting === "true" && noteSetting !== false);
-        noteSettings[setting] = settingValue;
-      });
-      return noteSettings;
+      return normalizeStatus(getUserProperty(data, "status"));
     },
   },
 };

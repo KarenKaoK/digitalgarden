@@ -1,0 +1,168 @@
+---
+permalink: /garden/
+eleventyExcludeFromCollections: true
+dgShowFileTree: false
+---
+{% set notes = collections.note | gardenNotes %}
+{% set topics = notes | gardenTopics %}
+{% set types = notes | gardenTypes %}
+<!DOCTYPE html>
+<html lang="{{ meta.mainLanguage }}">
+  <head>
+    <title>Explore the Garden</title>
+    {% include "components/pageheader.njk" %}
+    {% for imp in dynamics.common.head %}
+      {% include imp %}
+    {% endfor %}
+  </head>
+  <body class="theme-{{meta.baseTheme}} markdown-preview-view markdown-rendered markdown-preview-section no-filetree has-navbar {{meta.bodyClasses}}">
+    {% include "components/notegrowthhistory.njk" %}
+    {% include "components/navbar.njk" %}
+
+    {% if settings.dgEnableSearch === true %}
+      {% include "components/searchContainer.njk" %}
+    {% endif %}
+
+    <main class="content cm-s-obsidian print garden-browser">
+      <header class="garden-browser-header">
+        <h1>Explore the Garden</h1>
+        <p class="garden-browser-intro">Browse published notes by topic, growth stage, and type.</p>
+      </header>
+
+      <section class="garden-filter-panel" aria-label="Garden filters">
+        {% if topics.length %}
+          <div class="garden-filter-group" data-filter-group="topic">
+            <h2>Topics</h2>
+            <div class="garden-filter-options">
+              <button class="garden-filter-button is-active" type="button" data-filter="topic" data-value="">All</button>
+              {% for topic in topics %}
+                <button class="garden-filter-button" type="button" data-filter="topic" data-value="{{ topic.value }}">{{ topic.label }}</button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="garden-filter-group" data-filter-group="status">
+          <h2>Growth Stage</h2>
+          <div class="garden-filter-options">
+            <button class="garden-filter-button is-active" type="button" data-filter="status" data-value="">All</button>
+            {% for status in ["seed", "growing", "evergreen"] %}
+              <button class="garden-filter-button" type="button" data-filter="status" data-value="{{ status }}">{{ status | gardenStatusLabel }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if types.length %}
+          <div class="garden-filter-group" data-filter-group="type">
+            <h2>Type</h2>
+            <div class="garden-filter-options">
+              <button class="garden-filter-button is-active" type="button" data-filter="type" data-value="">All</button>
+              {% for type in types %}
+                <button class="garden-filter-button" type="button" data-filter="type" data-value="{{ type.value }}">{{ type.label }}</button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </section>
+
+      <div class="garden-results-summary">
+        <span data-garden-result-count>{{ notes.length }}</span> notes
+      </div>
+
+      <section class="garden-note-list" aria-label="Garden notes">
+        {% for note in notes %}
+          <article class="garden-note-card"
+            data-garden-note
+            data-status="{{ note.status }}"
+            data-type="{{ note.type }}"
+            data-topics="{{ note.topicValues | join(' ') }}">
+            <h2><a href="{{ note.url }}">{{ note.title }}</a></h2>
+            <div class="garden-card-meta">
+              {% if note.statusLabel %}
+                <span class="note-status-badge" data-status="{{ note.status }}">{{ note.statusLabel }}</span>
+              {% endif %}
+              {% if note.typeLabel %}
+                <span class="garden-type-badge">{{ note.typeLabel }}</span>
+              {% endif %}
+            </div>
+            {% if note.topics.length %}
+              <div class="garden-topic-row">
+                {% for topic in note.topics %}
+                  <a class="garden-topic-chip" href="/garden/?topic={{ topic.value }}">{{ topic.label }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {% if note.description %}
+              <p class="garden-card-description">{{ note.description }}</p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </section>
+
+      <p class="garden-empty-state" data-garden-empty hidden>No notes match these filters.</p>
+    </main>
+
+    {% include "components/references.njk" %}
+    {% include "components/timestamps.njk" %}
+    {% for imp in dynamics.common.footer %}
+      {% include imp %}
+    {% endfor %}
+    {% include "components/lucideIcons.njk" %}
+    <script>
+      (() => {
+        const state = { topic: "", status: "", type: "" };
+        const notes = Array.from(document.querySelectorAll("[data-garden-note]"));
+        const buttons = Array.from(document.querySelectorAll("[data-filter]"));
+        const count = document.querySelector("[data-garden-result-count]");
+        const empty = document.querySelector("[data-garden-empty]");
+        const params = new URLSearchParams(window.location.search);
+
+        for (const key of Object.keys(state)) {
+          state[key] = params.get(key) || "";
+        }
+
+        function matches(note) {
+          const noteTopics = (note.dataset.topics || "").split(" ").filter(Boolean);
+          return (!state.topic || noteTopics.includes(state.topic))
+            && (!state.status || note.dataset.status === state.status)
+            && (!state.type || note.dataset.type === state.type);
+        }
+
+        function syncUrl() {
+          const next = new URLSearchParams();
+          for (const [key, value] of Object.entries(state)) {
+            if (value) next.set(key, value);
+          }
+          const query = next.toString();
+          history.replaceState(null, "", query ? `${location.pathname}?${query}` : location.pathname);
+        }
+
+        function render() {
+          let visible = 0;
+          for (const note of notes) {
+            const show = matches(note);
+            note.hidden = !show;
+            if (show) visible += 1;
+          }
+          if (count) count.textContent = String(visible);
+          if (empty) empty.hidden = visible !== 0;
+
+          for (const button of buttons) {
+            const key = button.dataset.filter;
+            button.classList.toggle("is-active", (state[key] || "") === (button.dataset.value || ""));
+          }
+          syncUrl();
+        }
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            state[button.dataset.filter] = button.dataset.value || "";
+            render();
+          });
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
