@@ -49,8 +49,7 @@ body {
         line-height: 1.4;
     }
 
-    .garden-browser,
-    .garden-home-entry {
+    .garden-browser {
         --garden-gap: 0.85rem;
     }
 
@@ -64,8 +63,6 @@ body {
 
     .garden-browser-intro,
     .garden-card-description,
-    .garden-home-empty,
-    .garden-home-kicker,
     .garden-section-intro {
         color: var(--text-muted);
     }
@@ -113,8 +110,7 @@ body {
     }
 
     .garden-filter-options,
-    .garden-topic-row,
-    .garden-home-topics {
+    .garden-topic-row {
         display: flex;
         flex-wrap: wrap;
         gap: 0.45rem;
@@ -194,41 +190,4 @@ body {
         color: var(--text-muted);
     }
 
-    .garden-home-entry {
-        margin: 0 0 2rem;
-        padding: 1rem 0 1.25rem;
-        border-bottom: 1px solid var(--background-modifier-border);
-
-        h2 {
-            margin-top: 0;
-        }
-
-        h2 + h2 {
-            margin-top: 1.2rem;
-        }
-    }
-
-    .garden-home-kicker {
-        margin: 0 0 0.3rem;
-        font-size: 0.82em;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
-
-    .garden-browse-link {
-        display: inline-flex;
-        margin-top: 0.85rem;
-        font-weight: 600;
-    }
-
-    .garden-home-hubs {
-        display: grid;
-        gap: 0.35rem;
-        margin-bottom: 1rem;
-    }
-
-    .garden-hub-link {
-        width: fit-content;
-        font-weight: 600;
-    }
 }
