@@ -9,6 +9,10 @@ const ACRONYM_LABELS = {
 	mlops: "MLOps",
 };
 
+const TYPE_LABELS = {
+	hub: "Hub",
+};
+
 const SYSTEM_TAGS = new Set(["gardenEntry", "note"]);
 
 function getUserProperty(data, key) {
@@ -36,6 +40,7 @@ function normalizeFacetValue(value) {
 function labelFromValue(value) {
 	const normalized = normalizeFacetValue(value);
 	if (ACRONYM_LABELS[normalized]) return ACRONYM_LABELS[normalized];
+	if (TYPE_LABELS[normalized]) return TYPE_LABELS[normalized];
 
 	return String(value || "")
 		.trim()
@@ -130,6 +135,10 @@ function gardenTypes(notes) {
 	return uniqueFacets(notes, (note) => note.type);
 }
 
+function gardenHubs(notes) {
+	return (notes || []).filter((note) => note.type === "hub");
+}
+
 module.exports = {
 	STATUS_LABELS,
 	getUserProperty,
@@ -139,5 +148,6 @@ module.exports = {
 	gardenNotes,
 	gardenTopics,
 	gardenTypes,
+	gardenHubs,
 	labelFromValue,
 };

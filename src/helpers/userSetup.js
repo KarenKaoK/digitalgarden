@@ -10,12 +10,14 @@ function userEleventySetup(eleventyConfig) {
     gardenNotes,
     gardenTopics,
     gardenTypes,
+    gardenHubs,
     labelFromValue,
   } = require("./gardenMetadata");
 
   eleventyConfig.addFilter("gardenNotes", gardenNotes);
   eleventyConfig.addFilter("gardenTopics", gardenTopics);
   eleventyConfig.addFilter("gardenTypes", gardenTypes);
+  eleventyConfig.addFilter("gardenHubs", gardenHubs);
   eleventyConfig.addFilter("gardenStatusLabel", (status) => STATUS_LABELS[status] || "");
   eleventyConfig.addFilter("gardenLabel", labelFromValue);
 }

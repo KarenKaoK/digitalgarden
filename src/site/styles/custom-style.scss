@@ -65,8 +65,37 @@ body {
     .garden-browser-intro,
     .garden-card-description,
     .garden-home-empty,
-    .garden-home-kicker {
+    .garden-home-kicker,
+    .garden-section-intro {
         color: var(--text-muted);
+    }
+
+    .garden-hub-section {
+        margin: 1.2rem 0 1.4rem;
+        padding-bottom: 1.1rem;
+        border-bottom: 1px solid var(--background-modifier-border);
+
+        h2 {
+            margin-bottom: 0.25rem;
+        }
+    }
+
+    .garden-section-intro {
+        margin: 0 0 0.85rem;
+    }
+
+    .garden-hub-list {
+        display: grid;
+        gap: var(--garden-gap);
+    }
+
+    .garden-hub-card {
+        padding: 0.85rem 0;
+
+        h3 {
+            margin: 0 0 0.35rem;
+            font-size: 1.05em;
+        }
     }
 
     .garden-filter-panel {
@@ -173,6 +202,10 @@ body {
         h2 {
             margin-top: 0;
         }
+
+        h2 + h2 {
+            margin-top: 1.2rem;
+        }
     }
 
     .garden-home-kicker {
@@ -185,6 +218,17 @@ body {
     .garden-browse-link {
         display: inline-flex;
         margin-top: 0.85rem;
+        font-weight: 600;
+    }
+
+    .garden-home-hubs {
+        display: grid;
+        gap: 0.35rem;
+        margin-bottom: 1rem;
+    }
+
+    .garden-hub-link {
+        width: fit-content;
         font-weight: 600;
     }
 }

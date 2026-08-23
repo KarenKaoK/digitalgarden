@@ -6,6 +6,7 @@ dgShowFileTree: false
 {% set notes = collections.note | gardenNotes %}
 {% set topics = notes | gardenTopics %}
 {% set types = notes | gardenTypes %}
+{% set hubs = notes | gardenHubs %}
 <!DOCTYPE html>
 <html lang="{{ meta.mainLanguage }}">
   <head>
@@ -28,6 +29,36 @@ dgShowFileTree: false
         <h1>Explore the Garden</h1>
         <p class="garden-browser-intro">Browse published notes by topic, growth stage, and type.</p>
       </header>
+
+      {% if hubs.length %}
+        <section class="garden-hub-section" aria-label="Garden hubs">
+          <h2>Hubs</h2>
+          <p class="garden-section-intro">Curated entry points into related notes.</p>
+          <div class="garden-hub-list">
+            {% for hub in hubs %}
+              <article class="garden-hub-card">
+                <h3><a href="{{ hub.url }}">{{ hub.title }}</a></h3>
+                <div class="garden-card-meta">
+                  {% if hub.statusLabel %}
+                    <span class="note-status-badge" data-status="{{ hub.status }}">{{ hub.statusLabel }}</span>
+                  {% endif %}
+                  <span class="garden-type-badge">Hub</span>
+                </div>
+                {% if hub.topics.length %}
+                  <div class="garden-topic-row">
+                    {% for topic in hub.topics %}
+                      <a class="garden-topic-chip" href="/garden/?topic={{ topic.value }}">{{ topic.label }}</a>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                {% if hub.description %}
+                  <p class="garden-card-description">{{ hub.description }}</p>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
 
       <section class="garden-filter-panel" aria-label="Garden filters">
         {% if topics.length %}

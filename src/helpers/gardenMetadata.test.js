@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	gardenNoteFromItem,
+	gardenHubs,
 	gardenNotes,
 	gardenTopics,
 	gardenTypes,
@@ -95,6 +96,41 @@ describe("garden metadata", () => {
 		expect(gardenTypes(notes)).toEqual([
 			{ value: "note", label: "Note" },
 			{ value: "travel", label: "Travel" },
+		]);
+	});
+
+	it("supports hub as an intentional content type", () => {
+		const notes = gardenNotes([
+			item({
+				title: "Machine Learning",
+				type: "hub",
+				status: "growing",
+				topics: ["machine-learning"],
+			}),
+			item({
+				title: "Books",
+				"dg-note-properties": {
+					type: "hub",
+					status: "seed",
+					topics: ["books"],
+				},
+			}),
+			item({
+				title: "Regular Note",
+				type: "note",
+				topics: ["machine-learning"],
+			}),
+		]);
+
+		expect(notes.map((note) => [note.title, note.type, note.typeLabel])).toEqual([
+			["Books", "hub", "Hub"],
+			["Machine Learning", "hub", "Hub"],
+			["Regular Note", "note", "Note"],
+		]);
+		expect(gardenTypes(notes)).toContainEqual({ value: "hub", label: "Hub" });
+		expect(gardenHubs(notes).map((note) => note.title)).toEqual([
+			"Books",
+			"Machine Learning",
 		]);
 	});
 });
