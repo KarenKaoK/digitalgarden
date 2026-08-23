@@ -1,6 +1,8 @@
 ---
-{"dg-publish":true,"permalink":"/travel/paris-2026/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/travel/paris-2026/","dg-note-properties":{"garden-type":"hub","status":"growing","topics":["travel"]}}
 ---
+
+
 
 ## Daily Notes 
 - [[Travel/Paris Day 1\|Paris Day 1]] 
