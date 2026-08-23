@@ -10,5 +10,5 @@
 
 
 ## Travel
-- [[03 Travel/Paris 2026\|Paris 2026]]
+- [[Travel/Paris 2026\|Paris 2026]]
 
