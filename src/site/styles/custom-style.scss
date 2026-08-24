@@ -573,6 +573,16 @@ body.theme-dark .garden-kind-badge {
 #link-graph {
     background: var(--garden-surface);
     border-color: var(--garden-border);
+    min-width: var(--dg-graph-width);
+    min-height: var(--dg-graph-height);
+
+    canvas {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
 }
 
 .search-container {

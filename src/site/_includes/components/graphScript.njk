@@ -450,10 +450,16 @@ let globalGraphCleanup = null;
 let localGraphDepth = 1;
 
 async function init() {
-    const { graphData, fullGraphData } = await fetchGraphData();
-    graphDataCache = graphData;
-    fullGraphDataCache = fullGraphData;
-    renderLocal();
+    if (!document.getElementById('link-graph')) return;
+
+    try {
+        const { graphData, fullGraphData } = await fetchGraphData();
+        graphDataCache = graphData;
+        fullGraphDataCache = fullGraphData;
+        renderLocal();
+    } catch (error) {
+        console.error('Failed to initialize graph', error);
+    }
 }
 
 function renderLocal() {
@@ -462,8 +468,12 @@ function renderLocal() {
         localGraphCleanup = null;
     }
     const data = filterLocalGraphData(graphDataCache, localGraphDepth);
-    const cleanup = renderGraph(data, 'link-graph', false);
-    localGraphCleanup = cleanup;
+    try {
+        const cleanup = renderGraph(data, 'link-graph', false);
+        localGraphCleanup = cleanup;
+    } catch (error) {
+        console.error('Failed to render local graph', error);
+    }
 }
 
 function setLocalGraphDepth(depth) {
@@ -478,8 +488,12 @@ function openModal(data) {
     }
     document.getElementById('full-graph').style.display = '';
     setTimeout(() => {
-        globalGraphCleanup = renderGraph(data, 'full-graph-container', true);
-        lucide.createIcons({ attrs: { class: ['svg-icon'] } });
+        try {
+            globalGraphCleanup = renderGraph(data, 'full-graph-container', true);
+            lucide.createIcons({ attrs: { class: ['svg-icon'] } });
+        } catch (error) {
+            console.error('Failed to render expanded graph', error);
+        }
     }, 50);
 }
 
@@ -507,7 +521,11 @@ document.addEventListener('forestry:css-changed', function() {
     if (graphDataCache) renderLocal();
 });
 
-init();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+} else {
+    init();
+}
 </script>
 
 <div id="graph-component" class="graph" x-data="{ showFullGraph: false, graphDepth: 1 }">
