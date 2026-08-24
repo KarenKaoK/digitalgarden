@@ -23,6 +23,11 @@
 - 不追求把所有事情分類得很完美，分類只是方便整理與探索，不是限制內容的框架
 - Folder 只是整理方式，真正的結構來自主題、狀態與筆記之間的連結
 
+## Browse
+
+ [Browse all notes](/garden/)
+
+
 ## Explore
 
 ### [[Machine Learning/Machine Learning\|Machine Learning]]
@@ -41,8 +46,5 @@
 
 旅行紀錄，包括每日行程、地點、博物館、食物與旅行中的觀察。
 
-## Browse
-
- [Browse all notes](/garden/)
 
 
