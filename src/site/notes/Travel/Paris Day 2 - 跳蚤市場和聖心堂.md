@@ -11,4 +11,7 @@
 - 18:25 [蒙馬特法式吐司 Fric-Frac](https://maps.app.goo.gl/KUuBhQ5ZnZifMKky9) 👍 👍 👍 
 - 19:25 遇到熱心當地人推薦：[Maggie頂樓餐廳看聖心堂](https://share.google/WyOIK6IMqQHt8wVAo)👍 👍 👍 
   ![Pasted image 20260824011609.png](/img/user/100%20Attachments/Pasted%20image%2020260824011609.png)
-- 20:00 繼續腳踏車塞納河夕陽和艾菲爾鐵塔
+- 20:00 繼續騎腳踏車塞納河夕陽和羅浮宮和艾菲爾鐵塔
+  ![Pasted image 20260824101936.png](/img/user/100%20Attachments/Pasted%20image%2020260824101936.png)
+  ![Pasted image 20260824102030.png](/img/user/100%20Attachments/Pasted%20image%2020260824102030.png)
+  ![Pasted image 20260824102045.png](/img/user/100%20Attachments/Pasted%20image%2020260824102045.png)
