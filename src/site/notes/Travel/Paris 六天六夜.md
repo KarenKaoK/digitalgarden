@@ -29,4 +29,4 @@
 ## Toilets
 
 - 免費自動清潔公廁，直接在google map 上搜尋，很方便
-![Pasted image 20260824123344.png](/img/user/Pasted%20image%2020260824123344.png)
+![Pasted image 20260824123344.png](/img/user/100%20Attachments/Pasted%20image%2020260824123344.png)
