@@ -34,7 +34,7 @@
 
 記錄 Machine Learning、MLOps、AI 與實作過程中的學習。
 
-### [[Job Search\|Job Search]]
+### [[Job Hunting/Job Hunting\|Job Hunting]]
 
 整理求職策略、面試準備、履歷、職涯選擇，以及求職過程中的觀察。
 
