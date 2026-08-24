@@ -6,7 +6,6 @@ dgShowFileTree: false
 {% set notes = collections.note | gardenNotes %}
 {% set topics = notes | gardenTopics %}
 {% set kinds = notes | gardenKinds %}
-{% set recentNotes = notes | gardenRecentNotes(3) %}
 <!DOCTYPE html>
 <html lang="{{ meta.mainLanguage }}">
   <head>
@@ -25,37 +24,6 @@ dgShowFileTree: false
     {% endif %}
 
     <main class="content cm-s-obsidian print garden-browser">
-      {% if recentNotes.length %}
-        <section class="garden-recent-section" aria-label="Recently updated notes">
-          <h1>Recently Updated</h1>
-          <div class="garden-recent-list">
-            {% for note in recentNotes %}
-              <article class="garden-recent-card">
-                <h2><a href="{{ note.url }}">{{ note.title }}</a></h2>
-                <div class="garden-card-meta">
-                  {% if note.statusLabel %}
-                    <span class="note-status-badge" data-status="{{ note.status }}">{{ note.statusLabel }}</span>
-                  {% endif %}
-                  {% if note.kindLabel %}
-                    <span class="garden-kind-badge">{{ note.kindLabel }}</span>
-                  {% endif %}
-                </div>
-                {% if note.topics.length %}
-                  <div class="garden-topic-row">
-                    {% for topic in note.topics %}
-                      <a class="garden-topic-chip" href="/garden/?topic={{ topic.value }}">{{ topic.label }}</a>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-                {% if note.description %}
-                  <p class="garden-card-description">{{ note.description }}</p>
-                {% endif %}
-              </article>
-            {% endfor %}
-          </div>
-        </section>
-      {% endif %}
-
       <section class="garden-filter-panel" aria-label="Garden filters">
         {% if topics.length %}
           <div class="garden-filter-group" data-filter-group="topic">
