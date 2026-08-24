@@ -12,6 +12,7 @@ function userEleventySetup(eleventyConfig) {
     gardenKinds,
     gardenHubs,
     gardenRecentNotes,
+    gardenSequenceNav,
     labelFromValue,
   } = require("./gardenMetadata");
 
@@ -20,6 +21,11 @@ function userEleventySetup(eleventyConfig) {
   eleventyConfig.addFilter("gardenKinds", gardenKinds);
   eleventyConfig.addFilter("gardenHubs", gardenHubs);
   eleventyConfig.addFilter("gardenRecentNotes", gardenRecentNotes);
+  eleventyConfig.addNunjucksAsyncFilter("gardenSequenceNav", (collection, currentUrl, callback) => {
+    gardenSequenceNav(collection, currentUrl)
+      .then((nav) => callback(null, nav))
+      .catch((error) => callback(error));
+  });
   eleventyConfig.addFilter("gardenStatusLabel", (status) => STATUS_LABELS[status] || "");
   eleventyConfig.addFilter("gardenLabel", labelFromValue);
 }

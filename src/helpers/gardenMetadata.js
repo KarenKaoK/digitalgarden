@@ -4,6 +4,8 @@ const STATUS_LABELS = {
 	evergreen: "🌳 Evergreen",
 };
 
+const { extractLinks } = require("./linkUtils");
+
 const ACRONYM_LABELS = {
 	ai: "AI",
 	mlops: "MLOps",
@@ -156,6 +158,99 @@ function gardenRecentNotes(notes, limit = 3) {
 		.slice(0, limit);
 }
 
+function noteStem(item) {
+	return (item?.filePathStem || "").replace("/notes/", "").replace(/^\/+/, "");
+}
+
+function titleForItem(item) {
+	return getUserProperty(item?.data || {}, "title") || item?.data?.title || item?.fileSlug || "";
+}
+
+function buildSequenceIndex(collection) {
+	const notes = (collection || []).filter(isPublishedGardenNote);
+	const byStem = new Map();
+	const byBasename = new Map();
+
+	for (const item of notes) {
+		const stem = noteStem(item);
+		if (!stem || !item.url) continue;
+		byStem.set(stem, item);
+
+		const basename = stem.split("/").pop();
+		if (basename && !byBasename.has(basename)) {
+			byBasename.set(basename, item);
+		} else if (basename) {
+			byBasename.set(basename, null);
+		}
+	}
+
+	return { notes, byStem, byBasename };
+}
+
+function resolveSequenceLink(link, index) {
+	const normalized = String(link || "").replace(/^\/+/, "").replace(/\/$/, "");
+	return index.byStem.get(normalized) || index.byBasename.get(normalized) || null;
+}
+
+async function hubSequenceFromItem(hub, index) {
+	const templateContent = await hub.template.read();
+	const content = templateContent?.content || "";
+	const stem = noteStem(hub);
+	const seen = new Set();
+	const links = [];
+
+	for (const link of extractLinks(content, stem)) {
+		const item = resolveSequenceLink(link, index);
+		if (!item || item.url === hub.url || seen.has(item.url)) continue;
+		seen.add(item.url);
+		links.push({
+			title: titleForItem(item),
+			url: item.url,
+		});
+	}
+
+	return {
+		hub: {
+			title: titleForItem(hub),
+			url: hub.url,
+		},
+		links,
+	};
+}
+
+async function gardenSequenceNav(collection, currentUrl) {
+	if (!currentUrl) return null;
+	const index = buildSequenceIndex(collection);
+	const hubs = index.notes.filter(
+		(item) => normalizeFacetValue(getUserProperty(item.data, "garden-type")) === "hub",
+	);
+	const sequences = [];
+
+	for (const hub of hubs) {
+		const sequence = await hubSequenceFromItem(hub, index);
+		const currentIndex = sequence.links.findIndex((link) => link.url === currentUrl);
+		if (currentIndex === -1) continue;
+		sequences.push({ ...sequence, currentIndex });
+	}
+
+	if (!sequences.length) return null;
+	sequences.sort((a, b) => b.links.length - a.links.length || a.hub.title.localeCompare(b.hub.title));
+
+	const sequence = sequences[0];
+	const previous =
+		sequence.currentIndex > 0 ? sequence.links[sequence.currentIndex - 1] : sequence.hub;
+	const next =
+		sequence.currentIndex < sequence.links.length - 1
+			? sequence.links[sequence.currentIndex + 1]
+			: null;
+
+	return {
+		hub: sequence.hub,
+		previous,
+		next,
+	};
+}
+
 module.exports = {
 	STATUS_LABELS,
 	getUserProperty,
@@ -167,5 +262,6 @@ module.exports = {
 	gardenKinds,
 	gardenHubs,
 	gardenRecentNotes,
+	gardenSequenceNav,
 	labelFromValue,
 };

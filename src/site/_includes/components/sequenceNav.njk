@@ -1,0 +1,17 @@
+{% set sequenceNav = collections.note | gardenSequenceNav(page.url) %}
+{% if sequenceNav %}
+  <nav class="note-sequence-nav" aria-label="Note sequence">
+    {% if sequenceNav.previous %}
+      <a class="note-sequence-link note-sequence-link-prev" href="{{ sequenceNav.previous.url }}">
+        <span class="note-sequence-kicker">Previous</span>
+        <span class="note-sequence-title">{{ sequenceNav.previous.title }}</span>
+      </a>
+    {% endif %}
+    {% if sequenceNav.next %}
+      <a class="note-sequence-link note-sequence-link-next" href="{{ sequenceNav.next.url }}">
+        <span class="note-sequence-kicker">Next</span>
+        <span class="note-sequence-title">{{ sequenceNav.next.title }}</span>
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}

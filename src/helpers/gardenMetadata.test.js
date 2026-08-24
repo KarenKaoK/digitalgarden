@@ -4,6 +4,7 @@ import {
 	gardenHubs,
 	gardenNotes,
 	gardenRecentNotes,
+	gardenSequenceNav,
 	gardenTopics,
 	gardenKinds,
 	normalizeStatus,
@@ -13,9 +14,13 @@ import {
 const item = (data, overrides = {}) => ({
 	fileSlug: "Example Note",
 	url: "/example-note/",
+	filePathStem: "/notes/Example Note",
 	data: {
 		"dg-publish": true,
 		...data,
+	},
+	template: {
+		read: async () => ({ content: "" }),
 	},
 	...overrides,
 });
@@ -180,5 +185,45 @@ describe("garden metadata", () => {
 			"Fallback Date",
 			"Middle Note",
 		]);
+	});
+
+	it("builds previous and next links from the richest hub sequence", async () => {
+		const day1 = item(
+			{ title: "Paris Day 1", "garden-type": "note" },
+			{ url: "/travel/paris-day-1/", fileSlug: "Paris Day 1", filePathStem: "/notes/Travel/Paris Day 1" },
+		);
+		const day2 = item(
+			{ title: "Paris Day 2", "garden-type": "note" },
+			{ url: "/travel/paris-day-2/", fileSlug: "Paris Day 2", filePathStem: "/notes/Travel/Paris Day 2" },
+		);
+		const shortHub = item(
+			{ title: "Paris 2026", "garden-type": "hub" },
+			{
+				url: "/travel/paris-2026/",
+				fileSlug: "Paris 2026",
+				filePathStem: "/notes/Travel/Paris 2026",
+				template: {
+					read: async () => ({ content: "- [[Travel/Paris Day 1|Paris Day 1]]" }),
+				},
+			},
+		);
+		const fullHub = item(
+			{ title: "Paris 六天六夜", "garden-type": "hub" },
+			{
+				url: "/travel/paris/",
+				fileSlug: "Paris 六天六夜",
+				filePathStem: "/notes/Travel/Paris 六天六夜",
+				template: {
+					read: async () =>
+						({ content: "- [[Travel/Paris Day 1|Paris Day 1]]\n- [[Travel/Paris Day 2|Paris Day 2]]" }),
+				},
+			},
+		);
+
+		const nav = await gardenSequenceNav([shortHub, day1, day2, fullHub], "/travel/paris-day-1/");
+
+		expect(nav.hub.title).toBe("Paris 六天六夜");
+		expect(nav.previous).toEqual({ title: "Paris 六天六夜", url: "/travel/paris/" });
+		expect(nav.next).toEqual({ title: "Paris Day 2", url: "/travel/paris-day-2/" });
 	});
 });

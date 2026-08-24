@@ -68,6 +68,7 @@ permalink: "notes/{{ page.fileSlug | slugify }}/"
         {% include imp %}
       {% endfor %}
       {{ content | hideDataview | taggify | link | resolveMdLinks | safe}}
+      {% include "components/sequenceNav.njk" %}
       {% for imp in dynamics.common.afterContent %}
         {% include imp %}
       {% endfor %}
