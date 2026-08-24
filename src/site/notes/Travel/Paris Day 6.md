@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/travel/paris-day-6/","dg-note-properties":{"garden-type":"note","status":"evergreen","topics":["travel"]}}
+{"dg-publish":false,"hide":true,"permalink":"/hidden/paris-day-6-duplicate/","dg-note-properties":{"garden-type":"note","status":"evergreen","topics":["travel"]}}
 ---
 
 
