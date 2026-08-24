@@ -137,6 +137,7 @@ dgShowFileTree: false
           for (const note of notes) {
             const show = matches(note);
             note.hidden = !show;
+            note.classList.toggle("is-filtered-out", !show);
             if (show) visible += 1;
           }
           if (count) count.textContent = String(visible);
